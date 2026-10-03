@@ -1,0 +1,623 @@
+<title>Первый месяц Yolky Sense</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: отчёт-лента в одну колонку; у каждого раздела три слоя: вывод (заголовок), простыми словами (лид), «под капотом» (цифры для фаундера). Видоискатель камеры — единственный декоративный мотив. */
+:root{
+  --paper:#F2F0EA; --card:#FFFFFF; --ink:#1C1B17; --muted:#655F52; --faint:#A39D8C;
+  --line:#E5E0D4; --grid:#EEEAE0; --bar:#9B9584; --accent:#2F5FE0; --accent-soft:#E6ECFC;
+  --good:#1E8A58; --good-soft:#E2F2E8; --warn:#A8690F; --warn-soft:#FBF0DD; --bad:#C2402B; --bad-soft:#FBE9E4;
+  --person:#4a6fd0; --vehicle:#d08a1c; --animal:#3d8545;
+  --tip-bg:#1C1B17; --tip-fg:#F6F4EE;
+  --f-display:"Unbounded","Arial Black",system-ui,sans-serif;
+  --f-body:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --s-hero:clamp(64px,13vw,148px); --s-h1:clamp(28px,4.6vw,44px); --s-h2:clamp(21px,2.8vw,28px);
+  --s-lead:17px; --s-body:15px; --s-small:13px; --s-micro:11.5px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --paper:#141412; --card:#1D1C19; --ink:#EDEAE2; --muted:#ADA796; --faint:#77725F;
+  --line:#2F2D27; --grid:#28261F; --bar:#8A8473; --accent:#7C9BF2; --accent-soft:#232A40;
+  --good:#4CC28A; --good-soft:#18291F; --warn:#DDA24C; --warn-soft:#2D2416; --bad:#EC7560; --bad-soft:#331C17;
+  --person:#6a8ce6; --vehicle:#b87d22; --animal:#2f8f4c;
+  --tip-bg:#EDEAE2; --tip-fg:#1C1B17; color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --paper:#141412; --card:#1D1C19; --ink:#EDEAE2; --muted:#ADA796; --faint:#77725F;
+  --line:#2F2D27; --grid:#28261F; --bar:#8A8473; --accent:#7C9BF2; --accent-soft:#232A40;
+  --good:#4CC28A; --good-soft:#18291F; --warn:#DDA24C; --warn-soft:#2D2416; --bad:#EC7560; --bad-soft:#331C17;
+  --person:#6a8ce6; --vehicle:#b87d22; --animal:#2f8f4c;
+  --tip-bg:#EDEAE2; --tip-fg:#1C1B17; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:var(--s-body);line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:clamp(16px,4vw,40px);padding-block:28px 72px}
+h1,h2,h3{text-wrap:balance;margin:0}
+p{margin:0}
+.num,table,.tnum{font-variant-numeric:tabular-nums}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+
+/* ---------- hero ---------- */
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;font-size:var(--s-small);color:var(--muted)}
+.brand{font-family:var(--f-display);font-weight:700;letter-spacing:.02em;color:var(--ink);font-size:14px}
+.rec{display:inline-flex;align-items:center;gap:8px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:var(--s-micro)}
+.rec i{width:9px;height:9px;border-radius:50%;background:var(--bad);display:inline-block;animation:blink 2s infinite}
+@keyframes blink{50%{opacity:.25}}
+@media (prefers-reduced-motion:reduce){.rec i{animation:none}}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(24px,5vw,56px);align-items:center;margin-top:36px}
+.hero h1{font-family:var(--f-display);font-weight:700;font-size:var(--s-h1);line-height:1.08;letter-spacing:-.01em}
+.hero .lead{font-size:var(--s-lead);color:var(--muted);margin-top:16px;max-width:52ch}
+.finder{position:relative;padding:22px 26px 20px;justify-self:stretch}
+.finder::before,.finder::after,.finder>.c1,.finder>.c2{content:"";position:absolute;width:26px;height:26px;border-color:var(--ink);border-style:solid}
+.finder::before{top:0;left:0;border-width:2px 0 0 2px}
+.finder::after{top:0;right:0;border-width:2px 2px 0 0}
+.finder>.c1{bottom:0;left:0;border-width:0 0 2px 2px}
+.finder>.c2{bottom:0;right:0;border-width:0 2px 2px 0}
+.finder .tag{font-size:var(--s-micro);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.big{font-family:var(--f-display);font-weight:700;font-size:var(--s-hero);line-height:.95;letter-spacing:-.03em;color:var(--accent);margin-top:6px}
+.big small{font-size:.32em;letter-spacing:0;color:var(--ink);margin-left:6px;vertical-align:.9em}
+.finder .cap{margin-top:12px;font-size:var(--s-body);max-width:34ch}
+.was{display:inline-flex;gap:8px;align-items:baseline;margin-top:10px;font-size:var(--s-small);color:var(--muted)}
+.was b{font-family:var(--f-display);font-size:20px;color:var(--ink);text-decoration:line-through;text-decoration-color:var(--faint);text-decoration-thickness:2px}
+
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:40px}
+.kpi{background:var(--card);padding:18px 18px 16px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.kpi .v{font-family:var(--f-display);font-weight:500;font-size:clamp(24px,3.2vw,32px);line-height:1.1;font-variant-numeric:tabular-nums}
+.kpi .l{font-size:var(--s-small);color:var(--muted)}
+
+.brief{margin-top:28px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 32px;padding:20px 22px;background:var(--card);border-radius:14px;border:1px solid var(--line)}
+.brief h3{grid-column:1/-1;font-size:var(--s-micro);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.brief p{display:flex;gap:10px;align-items:flex-start;min-width:0}
+.dot{flex:none;width:9px;height:9px;border-radius:50%;margin-top:7px}
+.dot.good{background:var(--good)} .dot.bad{background:var(--bad)} .dot.warn{background:var(--warn)}
+
+/* ---------- sections ---------- */
+section{margin-top:72px;display:grid;gap:18px}
+.eyebrow{font-size:var(--s-micro);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;display:flex;gap:10px;align-items:center}
+.eyebrow::after{content:"";flex:1;height:1px;background:var(--line)}
+section h2{font-family:var(--f-display);font-weight:500;font-size:var(--s-h2);line-height:1.2;letter-spacing:-.005em;max-width:30ch}
+section .lead{font-size:var(--s-lead);max-width:64ch}
+.under{font-size:var(--s-small);color:var(--muted);max-width:78ch;border-top:1px dashed var(--line);padding-top:12px}
+.under b{color:var(--ink);font-weight:600}
+.under .k{font-size:var(--s-micro);letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--muted);margin-right:8px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 18px 14px;min-width:0}
+.panel h3{font-size:var(--s-body);font-weight:600}
+.panel .sub{font-size:var(--s-small);color:var(--muted);margin-top:2px}
+.chart{width:100%;margin-top:10px;position:relative}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.chart text{fill:var(--muted);font-family:var(--f-body);font-size:11px}
+.chart .gl{stroke:var(--grid);stroke-width:1}
+.chart .base{stroke:var(--faint);stroke-width:1}
+.chart .hit{fill:transparent;cursor:crosshair}
+.chart .lbl{fill:var(--ink);font-weight:600}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.step{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;gap:8px;align-content:start;min-width:0}
+.step .n{font-family:var(--f-display);font-weight:700;font-size:13px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent)}
+.step h3{font-size:16px;font-weight:600}
+.step p{color:var(--muted);font-size:var(--s-small)}
+
+/* annotations list */
+.marks{list-style:none;padding:0;margin:8px 0 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:6px 18px;font-size:var(--s-small)}
+.marks li{display:flex;gap:8px;align-items:baseline;min-width:0}
+.marks .m{flex:none;font-weight:700;font-size:11px;width:18px;height:18px;border-radius:50%;display:inline-grid;place-items:center;background:var(--accent);color:var(--card)}
+.marks .d{color:var(--muted);flex:none}
+
+.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.stat{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-top:8px}
+.stat .from{font-family:var(--f-display);font-size:22px;color:var(--faint);text-decoration:line-through;text-decoration-thickness:2px}
+.stat .arrow{color:var(--muted)}
+.stat .to{font-family:var(--f-display);font-size:32px;font-weight:700}
+.stat .unit{font-size:var(--s-small);color:var(--muted)}
+
+/* weekly multiples */
+.weeks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.wk .head{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.wk .hv{font-family:var(--f-display);font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}
+
+/* horizontal bars (html) */
+.hb{display:grid;gap:12px;margin-top:12px}
+.hb .row{display:grid;grid-template-columns:minmax(0,15em) minmax(0,1fr) 3.6em;gap:12px;align-items:center}
+.hb .name{font-size:var(--s-small);min-width:0}
+.hb .name small{display:block;color:var(--muted);font-size:var(--s-micro)}
+.hb .track{height:14px;border-radius:0 4px 4px 0;background:var(--grid);position:relative;cursor:crosshair}
+.hb .fill{position:absolute;inset:0 auto 0 0;border-radius:0 4px 4px 0}
+.hb .val{font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:var(--s-micro);font-weight:600;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.chip.good{background:var(--good-soft);color:var(--good)} .chip.warn{background:var(--warn-soft);color:var(--warn)} .chip.bad{background:var(--bad-soft);color:var(--bad)}
+
+/* dumbbell */
+.db{display:grid;gap:4px;margin-top:8px}
+.db .row{display:grid;grid-template-columns:minmax(0,10em) minmax(0,1fr) 7.5em;gap:12px;align-items:center;min-height:34px}
+.db .name{font-size:var(--s-small);min-width:0}
+.db .name small{display:block;color:var(--muted);font-size:var(--s-micro)}
+.db .lane{position:relative;height:24px;cursor:crosshair}
+.db .lane::before{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:var(--grid)}
+.db .seg{position:absolute;top:calc(50% - 1.5px);height:3px;background:var(--good);border-radius:2px;opacity:.5}
+.db .seg.worse{background:var(--bad)}
+.db .p{position:absolute;top:50%;width:12px;height:12px;border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 0 2px var(--card)}
+.db .p.a{background:var(--faint)} .db .p.b{background:var(--ink)}
+.db .delta{font-size:var(--s-small);text-align:right;font-variant-numeric:tabular-nums}
+.db .axis{display:grid;grid-template-columns:minmax(0,10em) minmax(0,1fr) 7.5em;gap:12px;font-size:var(--s-micro);color:var(--muted)}
+.db .axis .t{position:relative;height:14px}
+.db .axis .t span{position:absolute;transform:translateX(-50%)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:var(--s-small);color:var(--muted);margin-top:4px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.legend i.sq{border-radius:3px}
+
+/* rhythm multiples */
+.rh{display:grid;gap:4px}
+.rh .row{display:grid;grid-template-columns:7.5em minmax(0,1fr);gap:12px;align-items:end}
+.rh .nm{font-size:var(--s-small);font-weight:600;padding-bottom:4px}
+.rh .nm small{display:block;font-weight:400;color:var(--muted);font-size:var(--s-micro)}
+.night{fill:var(--grid)}
+
+/* ops tiles */
+.ops{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.op{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;gap:6px;align-content:start;min-width:0}
+.op .v{font-family:var(--f-display);font-size:24px;font-weight:500;line-height:1.15;font-variant-numeric:tabular-nums}
+.op .l{font-size:var(--s-small);color:var(--muted)}
+.meter{height:8px;border-radius:4px;background:var(--grid);overflow:hidden;margin-top:4px}
+.meter i{display:block;height:100%;border-radius:4px}
+.timeline{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.timeline li{display:grid;grid-template-columns:6.5em minmax(0,1fr);gap:14px;padding:12px 0;border-top:1px solid var(--line)}
+.timeline li:first-child{border-top:0}
+.timeline .when{font-size:var(--s-small);color:var(--muted);font-variant-numeric:tabular-nums}
+.timeline .what b{font-weight:600}
+.timeline .what p{color:var(--muted);font-size:var(--s-small);margin-top:2px}
+
+/* wins / growth */
+.wl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}
+.col{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;min-width:0}
+.col h3{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:600;margin-bottom:6px}
+.col ul{list-style:none;margin:0;padding:0}
+.col li{padding:10px 0;border-top:1px solid var(--line);display:grid;gap:2px}
+.col li:first-of-type{border-top:0}
+.col li b{font-weight:600}
+.col li span{color:var(--muted);font-size:var(--s-small)}
+
+.next{counter-reset:n;list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.next li{counter-increment:n;display:grid;grid-template-columns:2.2em minmax(0,1fr);gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.next li::before{content:counter(n);font-family:var(--f-display);font-weight:700;color:var(--accent);font-size:18px}
+.next b{font-weight:600}
+.next p{color:var(--muted);font-size:var(--s-small);margin-top:2px}
+
+details.tbl{font-size:var(--s-small);margin-top:8px}
+details.tbl summary{cursor:pointer;color:var(--muted);width:max-content}
+details.tbl .scroll{overflow-x:auto;margin-top:8px}
+details.tbl table{border-collapse:collapse;min-width:100%}
+details.tbl th,details.tbl td{padding:4px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+details.tbl th:first-child,details.tbl td:first-child{text-align:left}
+details.tbl th{color:var(--muted);font-weight:600}
+
+footer{margin-top:72px;padding-top:18px;border-top:1px solid var(--line);font-size:var(--s-small);color:var(--muted);display:grid;gap:8px;max-width:84ch}
+footer b{color:var(--ink);font-weight:600}
+
+#tip{position:fixed;z-index:20;pointer-events:none;background:var(--tip-bg);color:var(--tip-fg);font-size:12.5px;line-height:1.4;padding:7px 10px;border-radius:8px;max-width:260px;box-shadow:0 6px 18px rgba(0,0,0,.18);font-variant-numeric:tabular-nums}
+
+@media (max-width:820px){
+  .hero{grid-template-columns:minmax(0,1fr)}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .brief,.pair,.duo,.wl{grid-template-columns:minmax(0,1fr)}
+  .weeks,.steps,.ops{grid-template-columns:minmax(0,1fr)}
+  .hb .row{grid-template-columns:minmax(0,1fr) 3.6em}
+  .hb .name{grid-column:1/-1}
+  .hb .track{grid-column:1}
+  .db .row,.db .axis{grid-template-columns:minmax(0,7em) minmax(0,1fr) 5.4em;gap:8px}
+  .rh .row{grid-template-columns:5.6em minmax(0,1fr);gap:8px}
+}
+</style>
+
+<div class="wrap">
+  <div class="top">
+    <span class="brand">YOLKY SENSE</span>
+    <span class="rec"><i></i>Mac Mini · 24/7 · 3 сен — 3 окт 2026</span>
+  </div>
+
+  <header class="hero">
+    <div>
+      <h1>Первый месяц: дом начал узнавать своих</h1>
+      <p class="lead">Тридцать дней система смотрела восемь камер вокруг дома без выходных. Она перестала шуметь, научилась называть людей, машины и собак по именам и стала просить помощи у человека в два раза реже.</p>
+    </div>
+    <div class="finder" aria-label="Главная цифра месяца">
+      <span class="c1"></span><span class="c2"></span>
+      <div class="tag">Узнаёт сама · последние 10 дней</div>
+      <div class="big num">82<small>%</small></div>
+      <p class="cap">появлений система называет по имени без подсказки человека.</p>
+      <div class="was">в первую неделю <b class="num">44%</b></div>
+    </div>
+  </header>
+
+  <div class="kpis" role="list">
+    <div class="kpi" role="listitem"><span class="v">3 117</span><span class="l">событий записано</span></div>
+    <div class="kpi" role="listitem"><span class="v">31</span><span class="l">знакомый: 13 людей, 13 машин и техники, 5 животных</span></div>
+    <div class="kpi" role="listitem"><span class="v">9 439</span><span class="l">подсказок от человека, на них система учится</span></div>
+    <div class="kpi" role="listitem"><span class="v">1 Mac Mini</span><span class="l">всё считается дома, облако не нужно</span></div>
+  </div>
+
+  <div class="brief">
+    <h3>Коротко</h3>
+    <p><span class="dot good"></span><span>Система сама называет 82% появлений. В первую неделю было 44%.</span></p>
+    <p><span class="dot good"></span><span>Ручной разметки в 4,6 раза меньше, чем в пиковую неделю: 129 подсказок в день против 595.</span></p>
+    <p><span class="dot good"></span><span>По лицу ошибается 1 раз из 42. Ложные тревоги на Двери упали с 64% до 13%.</span></p>
+    <p><span class="dot bad"></span><span>Машины по месту в кадре угадываются в 38% случаев. Это самое слабое звено распознавания.</span></p>
+    <p><span class="dot bad"></span><span>Mac Mini на пределе: свободно 164 МБ памяти, на диск пишется около 250 ГБ в сутки.</span></p>
+    <p><span class="dot warn"></span><span>Две исследовательские ветки закрыты: марку машины и мелкие лица не вытянуть софтом с текущих камер.</span></p>
+  </div>
+
+  <!-- 1. how it works -->
+  <section aria-labelledby="s-how">
+    <div class="eyebrow">Для тех, кто видит это впервые</div>
+    <h2 id="s-how">Как это работает</h2>
+    <div class="steps">
+      <div class="step"><span class="n">1</span><h3>Камера видит</h3><p>Восемь камер в доме и во дворе. Нейросеть на каждом кадре ищет людей, машины и животных и отмечает их рамкой.</p></div>
+      <div class="step"><span class="n">2</span><h3>Система решает, кто это</h3><p>Сравнивает лицо, силуэт и цвет с эталонами знакомых. Уверена — пишет имя. Не уверена — спрашивает.</p></div>
+      <div class="step"><span class="n">3</span><h3>Человек поправляет</h3><p>Один клик: «верно», «это не он» или «ложная тревога». Каждая поправка становится новым эталоном или примером ошибки.</p></div>
+    </div>
+  </section>
+
+  <!-- 2. daily -->
+  <section aria-labelledby="s-daily">
+    <div class="eyebrow">Месяц по дням</div>
+    <h2 id="s-daily">Шум ушёл в первую неделю, дальше система пишет только то, что происходит</h2>
+    <p class="lead">В начале месяца система записывала по 500–700 находок в сутки, и большая часть была мусором: тени, отражения, один и тот же велосипед в мастерской. После нескольких исправлений поток успокоился до 100–300 находок в день.</p>
+    <div class="panel">
+      <h3>Находки объектов по дням</h3>
+      <div class="sub">Все камеры. Без 4 237 отметок неподвижного велосипеда в первую неделю: этот период скрыт из аналитики.</div>
+      <div class="chart" id="c-daily"></div>
+      <ol class="marks" id="c-daily-marks"></ol>
+    </div>
+    <div class="duo">
+      <div class="panel">
+        <h3>Записи о подавленном шуме</h3>
+        <div class="sub">Сколько раз в сутки система отмечала, что проигнорировала знакомую ложную тревогу</div>
+        <div class="stat"><span class="from num">516 688</span><span class="arrow">→</span><span class="to num">136</span><span class="unit">в сутки, 7 сен → 28 сен</span></div>
+      </div>
+      <div class="panel">
+        <h3>Папка с кадрами событий</h3>
+        <div class="sub">Чистится каждую ночь сама: за месяц удалено 40 370 файлов</div>
+        <div class="stat"><span class="from num">9,3 ГБ</span><span class="arrow">→</span><span class="to num">5,6 ГБ</span><span class="unit">5 сен → 3 окт, освобождено 44,4 ГБ</span></div>
+      </div>
+    </div>
+    <p class="under"><span class="k">Под капотом</span>Подавление ложных тревог работало всегда. 10 сентября мы перестали записывать каждое срабатывание: теперь одна запись в минуту на источник шума. Само подавление не менялось. 92% записей давали три неподвижных ложных источника в Мастерской.</p>
+  </section>
+
+  <!-- 3. learning -->
+  <section aria-labelledby="s-learn">
+    <div class="eyebrow">Обучение</div>
+    <h2 id="s-learn">Третья неделя ушла на разметку. Четвёртая показала отдачу</h2>
+    <p class="lead">В третью неделю человек размечал почти 600 находок в день и пересобрал эталоны по всей истории. Сразу после этого система стала узнавать вдвое чаще, а поправлять её пришлось реже.</p>
+    <div class="weeks">
+      <div class="panel wk">
+        <div class="head"><h3>Называет сама</h3><span class="hv" style="color:var(--accent)">82%</span></div>
+        <div class="sub">Доля настоящих появлений, где система сама поставила имя</div>
+        <div class="chart" id="c-auto"></div>
+      </div>
+      <div class="panel wk">
+        <div class="head"><h3>Человек исправил</h3><span class="hv">22%</span></div>
+        <div class="sub">Из тех, что система назвала сама и человек проверил</div>
+        <div class="chart" id="c-fix"></div>
+      </div>
+      <div class="panel wk">
+        <div class="head"><h3>Ручная разметка</h3><span class="hv">129</span></div>
+        <div class="sub">Подсказок от человека в день, в среднем за неделю</div>
+        <div class="chart" id="c-labor"></div>
+      </div>
+    </div>
+    <p class="under"><span class="k">Под капотом</span>Недели: 3–9, 10–16, 17–23 сентября и 24 сентября – 3 октября (10 дней). Какую сущность назвала машина, база хранит с 12 сентября, поэтому долю исправлений за первую неделю посчитать нельзя. В «исправлено» входят и переносы внутри семьи «Соседи»: с 30 сентября они не считаются ошибкой. 20–22 сентября эталоны пересчитаны по всей истории, исправления человека стали «негативами» (371 пример «это не он»), а у эталонов появился порог резкости.</p>
+  </section>
+
+  <!-- 4. methods -->
+  <section aria-labelledby="s-method">
+    <div class="eyebrow">Точность распознавания</div>
+    <h2 id="s-method">Лицо почти не ошибается. Слабое звено — машины по месту в кадре</h2>
+    <p class="lead">У системы несколько способов узнать знакомого. Лицо работает лучше всего, но камеры редко видят лицо крупно. Чаще помогает силуэт. Хуже всего работает догадка по месту: «здесь обычно стоит такая-то машина».</p>
+    <div class="panel">
+      <h3>Как часто система права, по способу узнавания</h3>
+      <div class="sub">Только находки, которые проверил человек, 22 сентября – 3 октября</div>
+      <div class="hb" id="c-method"></div>
+      <div class="legend" style="margin-top:14px"><span><span class="chip good">90%+</span> можно доверять</span><span><span class="chip warn">70–90%</span> нужен присмотр</span><span><span class="chip bad">ниже 70%</span> пока не годится</span></div>
+    </div>
+    <p class="under"><span class="k">Под капотом</span>Источник: журнал решений (1 881 запись с 22.09), сверка с итоговой разметкой. Люди по силуэту: строго 82% (613 из 749), с учётом переносов внутри семьи «Соседи» 86%. Ошибки по людям: 74 раза назван другой человек, 30 раз человека не было вовсе. Координатная память по машинам у ворот отложена до накопления данных: если она называет конкретную машину, права в 11 случаях из 99.</p>
+  </section>
+
+  <!-- 5. cameras -->
+  <section aria-labelledby="s-cams">
+    <div class="eyebrow">Камеры: было и стало</div>
+    <h2 id="s-cams">Ложных тревог стало меньше на всех камерах, кроме новой</h2>
+    <p class="lead">Ложная тревога — когда система приняла за человека куст, тень или блик. Сравниваем первую неделю с последними десятью днями.</p>
+    <div class="panel">
+      <h3>Доля ложных тревог среди размеченного</h3>
+      <div class="legend"><span><i style="background:var(--faint)"></i>3–9 сентября</span><span><i style="background:var(--ink)"></i>24 сен – 3 окт</span></div>
+      <div class="db" id="c-cams"></div>
+    </div>
+    <p class="under"><span class="k">Под капотом</span>Главный рычаг — порог уверенности по камере. Комната 0,35 → 0,87, Кухня 0,35 → 0,84, Мастерская 0,35 → 0,8, Дверь 0,35 → 0,5. У этого есть цена: на Комнате находок стало в 4,8 раза меньше (768 за первую неделю, 161 за последние 10 дней). Мастерская не показана: за последние 10 дней на ней 7 размеченных находок. Панорама выключена, Тамбур подключён 15 сентября.</p>
+  </section>
+
+  <!-- 6. rhythm -->
+  <section aria-labelledby="s-rhythm">
+    <div class="eyebrow">Ритм дома</div>
+    <h2 id="s-rhythm">Утром гуляют с собаками, днём ездят машины, ночью нагрузка минимальная</h2>
+    <p class="lead">Если сложить месяц в одни сутки и разбить их на четыре части, видно, как живёт двор. Ночью система почти отдыхает: находок в 20 раз меньше, чем днём.</p>
+    <div class="panel">
+      <h3>Настоящие появления по частям суток</h3>
+      <div class="sub">Сумма за месяц. У каждой строки свой масштаб</div>
+      <div class="rh" id="c-rhythm"></div>
+    </div>
+    <div class="duo">
+      <div class="panel">
+        <h3>Нагрузка ночью</h3>
+        <div class="sub">23:00–06:00, весь месяц, все камеры</div>
+        <div class="stat"><span class="to num">2%</span><span class="unit">всех находок за сутки приходится на ночь</span></div>
+      </div>
+      <div class="panel">
+        <h3>Самое сложное время — сумерки</h3>
+        <div class="sub">Камеры переходят в ночной режим, картинка меняется</div>
+        <div class="stat"><span class="to num">476</span><span class="unit">ложных тревог за месяц пришлись на вечер, больше, чем на любую другую часть суток</span></div>
+      </div>
+    </div>
+    <p class="under"><span class="k">Под капотом</span>Утро 06–11, день 11–17, вечер 17–23, ночь 23–06. С 23 сентября уличные камеры в тёмное время перепроверяют друг друга: из 12 находок, которые вторая камера не подтвердила, 9 действительно оказались ложными.</p>
+  </section>
+
+  <!-- 7. pairs -->
+  <section aria-labelledby="s-pairs">
+    <div class="eyebrow">Кто с кем</div>
+    <h2 id="s-pairs">Система заметила, кто ходит вместе</h2>
+    <p class="lead">Если двое часто попадают в одно событие, это пара: собака и хозяйка, хозяин и его велосипед. Система использует такие пары как подсказку. Если видна собака соседки, рядом, скорее всего, она сама.</p>
+    <div class="panel">
+      <h3>Самые частые пары за месяц</h3>
+      <div class="sub">Число событий, где оба были в кадре. Имена заменены описаниями</div>
+      <div class="hb" id="c-pairs"></div>
+    </div>
+    <p class="under"><span class="k">Под капотом</span>Самого частого жильца система видела на всех 10 камерах и в 29 днях из 31. 30 сентября появилась семья сущностей: «Соседи» стали общей группой, в которую входят конкретные соседи. Из базы удалены 81 противоречащий «негатив».</p>
+  </section>
+
+  <!-- 8. ops -->
+  <section aria-labelledby="s-ops">
+    <div class="eyebrow">Железо и надёжность</div>
+    <h2 id="s-ops">Работает без присмотра, но Mac Mini упёрся в потолок</h2>
+    <p class="lead">Система сама переживает зависания камер и чистит диск. Сам компьютер при этом работает на пределе: памяти не хватает, и он постоянно сбрасывает её на диск. Это первое, что нужно решить, прежде чем добавлять камеры.</p>
+    <div class="ops">
+      <div class="op"><span class="v">17 дней</span><span class="l">без перезагрузки. Данные есть за каждый из 31 дня месяца</span></div>
+      <div class="op"><span class="v">271</span><span class="l">раз поток камеры завис и восстановился сам, с 20 сентября, без участия человека</span></div>
+      <div class="op"><span class="v">10%</span><span class="l">диска занято, свободно 119 ГБ</span><div class="meter"><i style="width:10%;background:var(--good)"></i></div></div>
+      <div class="op"><span class="v" style="color:var(--bad)">78%</span><span class="l">процессора занято. Mac Mini M1, 8 камер</span><div class="meter"><i style="width:78%;background:var(--warn)"></i></div></div>
+      <div class="op"><span class="v" style="color:var(--bad)">164 МБ</span><span class="l">свободной памяти из 8 ГБ, ещё 2,6 ГБ сжато</span><div class="meter"><i style="width:98%;background:var(--bad)"></i></div></div>
+      <div class="op"><span class="v" style="color:var(--bad)">4,3 ТБ</span><span class="l">записано на диск за 17 дней, около 250 ГБ в сутки. Для SSD это много</span></div>
+    </div>
+    <div class="panel">
+      <h3>Инциденты месяца</h3>
+      <ul class="timeline">
+        <li><span class="when">3 сен</span><div class="what"><b>Переезд с ноутбука на Mac Mini.</b><p>Движок и веб работают как системные службы и сами поднимаются после сбоя.</p></div></li>
+        <li><span class="when">18 сен</span><div class="what"><b>Нейросеть зависла на 1 ч 42 мин.</b><p>Камеры работали, но кадры не разбирались. Добавлен сторож, который перезапускает распознавание. Заодно найдены и исправлены несколько гонок потоков.</p></div></li>
+        <li><span class="when">2 окт</span><div class="what"><b>Камера «За воротами» повернула картинку на 6°.</b><p>Сбой самой камеры, в приложении производителя картинка была ровной. Повёрнутый кадр сдвигает зоны и память мест. Помогла перезагрузка камеры.</p></div></li>
+        <li><span class="when">2 окт</span><div class="what"><b>Поток камеры застрял внутри декодера.</b><p>Добавлен сторож потока: пульс цикла, снимок стеков в лог, перезапуск. С 3 октября движок берёт не больше 10 кадров в секунду с камеры.</p></div></li>
+      </ul>
+    </div>
+    <p class="under"><span class="k">Под капотом</span>Нагрузка снята одним снимком <b>top</b> 3 октября в 11:27: load average около 7, подкачка 29 млн страниц в память и 32 млн из неё с момента загрузки. Сколько из 4,3 ТБ приходится на подкачку, а сколько на кадры и базу, ещё предстоит разобрать.</p>
+  </section>
+
+  <!-- 9. wins / growth -->
+  <section aria-labelledby="s-wl">
+    <div class="eyebrow">Итоги</div>
+    <h2 id="s-wl">Что получилось и где точки роста</h2>
+    <div class="wl">
+      <div class="col">
+        <h3><span class="dot good" style="margin:0"></span>Получилось</h3>
+        <ul>
+          <li><b>Узнавание выросло с 44% до 82%</b><span>После пересборки эталонов и обучения на ошибках 20–22 сентября.</span></li>
+          <li><b>Ручной работы стало вдвое меньше</b><span>129 подсказок в день против 253 в первую неделю.</span></li>
+          <li><b>Лицо: 41 из 42 верно</b><span>Животные и техника по силуэту: 95%.</span></li>
+          <li><b>Три камеры без ложных тревог</b><span>Кухня, Комната, Общий вид: 0% за последние 10 дней. Дверь: 64% → 13%.</span></li>
+          <li><b>Хранилище чистится само</b><span>44,4 ГБ удалено за месяц, папка событий держится около 5–6 ГБ.</span></li>
+          <li><b>Доступ из любой точки мира</b><span>Свой адрес с HTTPS. Проверено из четырёх стран.</span></li>
+          <li><b>Тестов стало 908</b><span>5 сентября было 187. Каждая находка из живых данных закрывается тестом.</span></li>
+        </ul>
+      </div>
+      <div class="col">
+        <h3><span class="dot bad" style="margin:0"></span>Точки роста</h3>
+        <ul>
+          <li><b>Mac Mini на пределе</b><span>Память, процессор, запись на диск. Добавлять девятую камеру некуда.</span></li>
+          <li><b>Сумерки</b><span>Когда камеры переходят в ночной режим, ложных тревог больше всего. Отдельная настройка на это время — в планах.</span></li>
+          <li><b>Машины по месту в кадре: 38%</b><span>Отложено до накопления данных. Машины по силуэту: 75%.</span></li>
+          <li><b>Похожие люди путаются</b><span>Двух членов семьи система перепутала 20 раз за один день разбора. Люди по силуэту — 82%.</span></li>
+          <li><b>Два тупика исследований</b><span>Марка машины через CLIP: 52% против 72% у силуэта. Улучшение мелких лиц нейросетью уводит от правды. Обе ветки упёрлись в оптику камер и закрыты.</span></li>
+          <li><b>Метрики врали две недели</b><span>До 12 сентября отчёт о качестве не видел ошибки там, где система не назвала имени. Найдено и исправлено.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. velocity -->
+  <section aria-labelledby="s-dev">
+    <div class="eyebrow">Темп разработки</div>
+    <h2 id="s-dev">330 изменений за месяц, темп спадает по мере взросления</h2>
+    <div class="duo">
+      <div class="panel">
+        <h3>Изменений в коде по неделям</h3>
+        <div class="sub">Коммиты в репозитории. Последняя неделя — 10 дней</div>
+        <div class="chart" id="c-commits"></div>
+      </div>
+      <div class="panel">
+        <h3>Автотесты</h3>
+        <div class="sub">Проверки, которые прогоняются перед каждой выкаткой</div>
+        <div class="chart" id="c-tests"></div>
+      </div>
+    </div>
+    <p class="under"><span class="k">Под капотом</span>7 релизов за месяц. 35 коммитов (11%) ушли в побочную линию: «Ёлку», питомца на пиксельном дисплее Pixoo, который показывает гостей с камер и танцует под музыку Яндекс Станции. Темп спадает, потому что крупные переделки закончились и работа сместилась в точечные исправления по живым данным.</p>
+  </section>
+
+  <!-- 11. next -->
+  <section aria-labelledby="s-next">
+    <div class="eyebrow">Что дальше</div>
+    <h2 id="s-next">Пять шагов на октябрь</h2>
+    <ol class="next">
+      <li><div><b>Разгрузить Mac Mini</b><p>Разобрать, откуда 250 ГБ записи в сутки, и снять нехватку памяти. Тогда станет ясно, сколько камер реально тянет одна коробка, а это себестоимость продукта для одного дома.</p></div></li>
+      <li><div><b>Настройка на сумерки</b><p>Отдельные пороги и перепроверка второй камерой на время, когда камеры переходят в ночной режим.</p></div></li>
+      <li><div><b>Вернуться к машинам у ворот</b><p>Через 2–3 недели журнала решений пересчитать точность памяти мест и решить: чинить или выключить.</p></div></li>
+      <li><div><b>Демо-режим</b><p>Отдельная копия в облаке с вымышленными именами и стилизованными кадрами, чтобы показывать продукт без доступа к дому. Архитектура согласована, работа на паузе.</p></div></li>
+      <li><div><b>Виджет хранилища</b><p>Приход и расход места по камерам и дням. Единственный несделанный пункт из сентябрьского списка аналитики.</p></div></li>
+    </ol>
+  </section>
+
+  <footer>
+    <p><b>Откуда цифры.</b> Живая база на Mac Mini, снимок 3 октября 2026 в 11:30. Последний день неполный. Находка — одна отметка объекта нейросетью внутри события. Событие — непрерывный эпизод активности на одной камере.</p>
+    <p><b>Что исключено.</b> 4 237 отметок неподвижного велосипеда в Мастерской за 3–9 сентября: этот период скрыт в аналитике самого продукта.</p>
+    <p><b>Публичная версия.</b> Имена людей и животных заменены описаниями, ритм по часам сведён к частям суток.</p>
+    <p><b>Точность</b> считается по находкам, которые проверил человек. Это нижняя граница ошибки: что никто не открыл, в расчёт не попало. Человек чаще открывает подозрительное, поэтому выборка смещена в сторону ошибок.</p>
+  </footer>
+</div>
+<div id="tip" hidden></div>
+
+<script>
+(function(){
+  var NS="http://www.w3.org/2000/svg";
+  var fmt=function(n){return Number(n).toLocaleString("ru-RU")};
+  function el(tag,attrs,parent){var e=document.createElementNS(NS,tag);for(var k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e}
+  function barPath(x,y,w,h,r){if(h<=0)return"";r=Math.min(r,w/2,h);return"M"+x+","+(y+h)+"V"+(y+r)+"Q"+x+","+y+" "+(x+r)+","+y+"H"+(x+w-r)+"Q"+(x+w)+","+y+" "+(x+w)+","+(y+r)+"V"+(y+h)+"Z"}
+  function niceMax(v){var p=Math.pow(10,Math.floor(Math.log10(v)));var m=v/p;var s=m<=1?1:m<=2?2:m<=2.5?2.5:m<=5?5:10;return s*p}
+  function table(container,head,rows){
+    var d=document.createElement("details");d.className="tbl";
+    var s=document.createElement("summary");s.textContent="Показать таблицей";d.appendChild(s);
+    var w=document.createElement("div");w.className="scroll";
+    var t="<table><thead><tr>"+head.map(function(h){return"<th>"+h+"</th>"}).join("")+"</tr></thead><tbody>"+rows.map(function(r){return"<tr>"+r.map(function(c){return"<td>"+c+"</td>"}).join("")+"</tr>"}).join("")+"</tbody></table>";
+    w.innerHTML=t;d.appendChild(w);container.appendChild(d);
+  }
+
+  /* generic vertical bars, rendered at real width */
+  function bars(id,o){
+    var host=document.getElementById(id);
+    var holder=document.createElement("div");host.appendChild(holder);
+    function draw(){
+      holder.innerHTML="";
+      var W=Math.max(240,host.clientWidth), H=o.height||200;
+      var padL=o.axis===false?4:36, padR=8, padT=o.marks?26:(o.valueLabels?20:10), padB=o.xh===0?6:22;
+      var svg=el("svg",{viewBox:"0 0 "+W+" "+H,role:"img","aria-label":o.aria||""},holder);
+      var n=o.data.length, iw=W-padL-padR, ih=H-padT-padB;
+      var max=o.max||niceMax(Math.max.apply(null,o.data.map(function(d){return d.v}))*1.04);
+      var y=function(v){return padT+ih-(v/max)*ih};
+      if(o.shade){o.shade.forEach(function(r){var x0=padL+iw*r[0]/n,x1=padL+iw*r[1]/n;el("rect",{x:x0,y:padT-4,width:x1-x0,height:ih+4,class:"night",fill:"var(--grid)"},svg)})}
+      if(o.axis!==false){var ticks=o.ticks||[0,max/2,max];ticks.forEach(function(t){var yy=y(t);if(t>0)el("line",{x1:padL,x2:W-padR,y1:yy,y2:yy,class:"gl"},svg);var tx=el("text",{x:padL-6,y:yy+4,"text-anchor":"end"},svg);tx.textContent=(o.tickFmt||fmt)(t)})}
+      var slot=iw/n, bw=Math.max(2,Math.min(o.maxBar||44,slot-(o.gap==null?Math.max(2,slot*.22):o.gap)));
+      o.data.forEach(function(d,i){
+        var x=padL+i*slot+(slot-bw)/2, yy=y(d.v), h=padT+ih-yy;
+        el("path",{d:barPath(x,yy,bw,h,Math.min(4,bw/2)),fill:d.color||o.color||"var(--bar)"},svg);
+        if(o.valueLabels){var vt=el("text",{x:x+bw/2,y:yy-6,"text-anchor":"middle",class:"lbl"},svg);vt.textContent=d.lab!=null?d.lab:fmt(d.v)}
+        if(o.xh!==0 && (o.xEvery?i%o.xEvery===0||i===n-1&&o.xLast:true)){var t=el("text",{x:x+bw/2,y:H-6,"text-anchor":"middle"},svg);t.textContent=d.x}
+        var hit=el("rect",{x:padL+i*slot,y:padT-4,width:slot,height:ih+4,class:"hit",fill:"transparent","data-tip":d.tip||(d.x+": "+fmt(d.v))},svg);
+      });
+      el("line",{x1:padL,x2:W-padR,y1:padT+ih,y2:padT+ih,class:"base"},svg);
+      if(o.marks){o.marks.forEach(function(m){var cx=padL+m.i*slot+slot/2;el("circle",{cx:cx,cy:11,r:9,fill:"var(--accent)"},svg);var t=el("text",{x:cx,y:15,"text-anchor":"middle",style:"fill:var(--card);font-weight:700;font-size:10.5px"},svg);t.textContent=m.n;el("line",{x1:cx,x2:cx,y1:21,y2:y(o.data[m.i].v)-2,stroke:"var(--accent)","stroke-width":1,"stroke-dasharray":"2 3"},svg)})}
+    }
+    draw();
+    var t;window.addEventListener("resize",function(){clearTimeout(t);t=setTimeout(draw,120)});
+    if(o.table)table(host,o.table.head,o.table.rows);
+  }
+
+  /* ---------- data ---------- */
+  var days=[["03.09",83,208],["04.09",688,427],["05.09",650,170],["06.09",458,118],["07.09",210,66],["08.09",196,97],["09.09",278,82],["10.09",287,81],["11.09",253,86],["12.09",518,118],["13.09",325,98],["14.09",194,67],["15.09",117,58],["16.09",210,95],["17.09",175,92],["18.09",136,69],["19.09",587,185],["20.09",486,187],["21.09",215,96],["22.09",193,71],["23.09",295,114],["24.09",169,83],["25.09",109,51],["26.09",155,53],["27.09",102,53],["28.09",70,28],["29.09",109,45],["30.09",222,76],["01.10",190,91],["02.10",83,41],["03.10",24,11]];
+  var wd=["Пн","Вт","Ср","Чт","Пт","Сб","Вс"];
+  var dailyMarks=[{i:0,n:1,t:"Переезд на Mac Mini, система работает круглосуточно",d:"3 сен"},{i:6,n:2,t:"Неподвижный велосипед перестал порождать события",d:"8–9 сен"},{i:16,n:3,t:"Самые оживлённые выходные месяца",d:"19–20 сен"},{i:19,n:4,t:"Журнал решений и обучение на исправлениях",d:"22 сен"},{i:27,n:5,t:"Появилась семья «Соседи»",d:"30 сен"}];
+  bars("c-daily",{height:230,maxBar:22,xEvery:7,xLast:true,marks:dailyMarks,ticks:[0,250,500,750],max:750,aria:"Находки объектов по дням, 3 сентября – 3 октября",
+    data:days.map(function(d,i){var dow=wd[(i+3)%7];return{x:d[0],v:d[1],tip:d[0]+" ("+dow+")"+(i===30?", неполный день":"")+"<br>"+fmt(d[1])+" находок · "+fmt(d[2])+" событий"}}),
+    table:{head:["День","Находок","Событий"],rows:days.map(function(d){return[d[0],fmt(d[1]),fmt(d[2])]})}});
+  document.getElementById("c-daily-marks").innerHTML=dailyMarks.map(function(m){return'<li><span class="m">'+m.n+'</span><span><span class="d">'+m.d+'</span> '+m.t+'</span></li>'}).join("");
+
+  var wkX=["1 нед","2 нед","3 нед","4 нед"];
+  var wkFull=["3–9 сен","10–16 сен","17–23 сен","24 сен – 3 окт"];
+  var auto=[44.2,42.4,37.4,82.1], autoN=[[720,1629],[716,1687],[715,1914],[928,1130]];
+  bars("c-auto",{height:150,axis:false,valueLabels:true,max:100,maxBar:40,aria:"Доля появлений, названных системой сама, по неделям",
+    data:auto.map(function(v,i){return{x:wkX[i],v:v,lab:Math.round(v)+"%",color:i===3?"var(--accent)":"var(--bar)",tip:wkFull[i]+"<br>"+Math.round(v)+"% · "+fmt(autoN[i][0])+" из "+fmt(autoN[i][1])}}),
+    table:{head:["Неделя","Назвала сама","Настоящих появлений","Доля"],rows:auto.map(function(v,i){return[wkFull[i],fmt(autoN[i][0]),fmt(autoN[i][1]),Math.round(v)+"%"]})}});
+  var fix=[null,31.9,32.0,22.1], fixN=[null,[130,407],[229,715],[205,928]];
+  bars("c-fix",{height:150,axis:false,valueLabels:true,max:100,maxBar:40,aria:"Доля исправленных человеком решений системы, по неделям",
+    data:fix.map(function(v,i){return{x:wkX[i],v:v||0,lab:v==null?"н/д":Math.round(v)+"%",color:i===3?"var(--ink)":"var(--bar)",tip:v==null?wkFull[i]+"<br>данных ещё не было":wkFull[i]+"<br>"+Math.round(v)+"% · "+fmt(fixN[i][0])+" из "+fmt(fixN[i][1])}}),
+    table:{head:["Неделя","Исправлено","Названо машиной","Доля"],rows:fix.map(function(v,i){return v==null?[wkFull[i],"—","—","н/д"]:[wkFull[i],fmt(fixN[i][0]),fmt(fixN[i][1]),Math.round(v)+"%"]})}});
+  var labor=[[1771,7],[2216,7],[4167,7],[1285,10]];
+  bars("c-labor",{height:150,axis:false,valueLabels:true,max:650,maxBar:40,aria:"Подсказок от человека в день, по неделям",
+    data:labor.map(function(l,i){var v=Math.round(l[0]/l[1]);return{x:wkX[i],v:v,color:i===3?"var(--ink)":"var(--bar)",tip:wkFull[i]+"<br>"+fmt(v)+" в день · всего "+fmt(l[0])}}),
+    table:{head:["Неделя","Подсказок всего","Дней","В день"],rows:labor.map(function(l,i){return[wkFull[i],fmt(l[0]),l[1],fmt(Math.round(l[0]/l[1]))]})}});
+
+  /* methods */
+  var methods=[
+    {name:"Лицо",note:"люди",ok:41,n:42},
+    {name:"Силуэт",note:"животные и техника",ok:72,n:76},
+    {name:"Силуэт",note:"люди, с учётом семьи «Соседи»",ok:645,n:749},
+    {name:"Силуэт",note:"машины",ok:43,n:57},
+    {name:"Место в кадре",note:"машины",ok:63,n:168}
+  ];
+  (function(){
+    var host=document.getElementById("c-method");
+    host.innerHTML=methods.map(function(m){var p=Math.round(100*m.ok/m.n);var cls=p>=90?"good":p>=70?"warn":"bad";
+      return'<div class="row"><div class="name">'+m.name+'<small>'+m.note+' · проверено '+fmt(m.n)+'</small></div><div class="track" data-tip="'+m.name+', '+m.note+'<br>верно '+fmt(m.ok)+' из '+fmt(m.n)+'"><div class="fill" style="width:'+p+'%;background:var(--'+cls+')"></div></div><div class="val"><span class="chip '+cls+'">'+p+'%</span></div></div>'}).join("");
+    table(host.parentNode,["Способ","Верно","Проверено","Точность"],methods.map(function(m){return[m.name+" ("+m.note+")",fmt(m.ok),fmt(m.n),Math.round(100*m.ok/m.n)+"%"]}));
+  })();
+
+  /* dumbbell cameras */
+  var cams=[
+    {n:"Панорама",s:"сейчас выключена",a:[51,67],b:[18,42]},
+    {n:"Дверь",s:"вход в дом",a:[396,621],b:[18,138]},
+    {n:"Парковка",s:"",a:[47,76],b:[11,49]},
+    {n:"Кухня",s:"",a:[193,356],b:[0,83]},
+    {n:"Дом. Общий вид",s:"",a:[39,82],b:[0,21]},
+    {n:"Комната",s:"",a:[127,765],b:[0,161]},
+    {n:"За воротами",s:"улица",a:[57,553],b:[29,655]},
+    {n:"Тамбур",s:"новая, с 15 сен",a:null,b:[15,67]}
+  ];
+  (function(){
+    var host=document.getElementById("c-cams"), max=80;
+    var pos=function(p){return(p/max*100).toFixed(2)+"%"};
+    var html=cams.map(function(c){
+      var pb=100*c.b[0]/c.b[1], pa=c.a?100*c.a[0]/c.a[1]:null;
+      var tip=c.n+(c.a?"<br>было: "+Math.round(pa)+"% ("+c.a[0]+" из "+c.a[1]+")":"<br>в первую неделю не работала")+"<br>стало: "+Math.round(pb)+"% ("+c.b[0]+" из "+c.b[1]+")";
+      var seg=c.a!=null?'<span class="seg'+(pb>pa?" worse":"")+'" style="left:'+pos(Math.min(pa,pb))+';width:calc('+pos(Math.abs(pa-pb))+')"></span>':"";
+      var delta=c.a!=null?'<b>'+Math.round(pa)+'% → '+Math.round(pb)+'%</b>':'<b style="color:var(--bad)">'+Math.round(pb)+'%</b>';
+      return'<div class="row"><div class="name">'+c.n+(c.s?'<small>'+c.s+'</small>':'')+'</div><div class="lane" data-tip="'+tip+'">'+seg+(c.a!=null?'<span class="p a" style="left:'+pos(pa)+'"></span>':'')+'<span class="p b" style="left:'+pos(pb)+'"></span></div><div class="delta">'+delta+'</div></div>'}).join("");
+    html+='<div class="axis"><span></span><div class="t">'+[0,20,40,60,80].map(function(t){return'<span style="left:'+pos(t)+'">'+t+'%</span>'}).join("")+'</div><span></span></div>';
+    host.innerHTML=html;
+    table(host.parentNode,["Камера","3–9 сен","24 сен – 3 окт"],cams.map(function(c){return[c.n,c.a?Math.round(100*c.a[0]/c.a[1])+"% ("+c.a[0]+"/"+c.a[1]+")":"—",Math.round(100*c.b[0]/c.b[1])+"% ("+c.b[0]+"/"+c.b[1]+")"]}));
+  })();
+
+  /* rhythm: части суток */
+  var partsX=["Утро","День","Вечер","Ночь"], partsFull=["утро, 06–11","день, 11–17","вечер, 17–23","ночь, 23–06"];
+  var parts={person:[941,2187,2062,33],vehicle:[107,631,217,9],animal:[84,9,79,1]};
+  var rows=[["person","Люди","день и вечер","var(--person)"],["vehicle","Машины","в основном днём","var(--vehicle)"],["animal","Животные","утро и вечер","var(--animal)"]];
+  (function(){
+    var host=document.getElementById("c-rhythm");
+    rows.forEach(function(r,ri){
+      var row=document.createElement("div");row.className="row";
+      row.innerHTML='<div class="nm">'+r[1]+'<small>'+r[2]+'</small></div><div class="chart" id="rh-'+r[0]+'" style="margin-top:0"></div>';
+      host.appendChild(row);
+      var last=ri===rows.length-1;
+      bars("rh-"+r[0],{height:last?84:62,axis:false,xh:last?1:0,color:r[3],maxBar:120,aria:r[1]+" по частям суток",
+        data:parts[r[0]].map(function(v,i){return{x:partsX[i],v:v,tip:r[1]+", "+partsFull[i]+"<br>"+fmt(v)+" за месяц"}})});
+    });
+    table(host.parentNode,["Часть суток","Люди","Машины","Животные"],partsFull.map(function(p,i){return[p,fmt(parts.person[i]),fmt(parts.vehicle[i]),fmt(parts.animal[i])]}));
+  })();
+
+  /* pairs */
+  var pairs=[["Собака соседки и её хозяйка",59,"animal"],["Двое из семьи хозяев",41,"person"],["Соседи и хозяйка собаки",35,"person"],["Хозяин и его велосипед",27,"vehicle"],["Соседи и собака соседки",27,"animal"],["Соседка и дети",18,"person"],["Соседский пёс и его хозяин",17,"animal"],["Соседка с собакой и Соседи",14,"person"]];
+  (function(){
+    var host=document.getElementById("c-pairs");
+    host.innerHTML=pairs.map(function(p){return'<div class="row"><div class="name">'+p[0]+'</div><div class="track" data-tip="'+p[0]+'<br>'+p[1]+' общих событий"><div class="fill" style="width:'+(p[1]/60*100).toFixed(1)+'%;background:var(--'+p[2]+')"></div></div><div class="val">'+p[1]+'</div></div>'}).join("");
+    host.insertAdjacentHTML("afterend",'<div class="legend" style="margin-top:12px"><span><i class="sq" style="background:var(--person)"></i>люди</span><span><i class="sq" style="background:var(--animal)"></i>с животным</span><span><i class="sq" style="background:var(--vehicle)"></i>с транспортом</span></div>');
+  })();
+
+  /* velocity */
+  bars("c-commits",{height:160,axis:false,valueLabels:true,max:120,maxBar:44,aria:"Коммиты по неделям",
+    data:[101,107,73,49].map(function(v,i){return{x:wkX[i],v:v,tip:wkFull[i]+"<br>"+v+" коммитов"}})});
+  bars("c-tests",{height:160,axis:false,valueLabels:true,max:1000,maxBar:44,aria:"Число автотестов",
+    data:[["5 сен",187],["9 сен",357],["3 окт",908]].map(function(d,i){return{x:d[0],v:d[1],color:i===2?"var(--accent)":"var(--bar)",tip:d[0]+"<br>"+d[1]+" тестов"}})});
+
+  /* tooltip */
+  var tip=document.getElementById("tip");
+  function show(e){var t=e.target.closest&&e.target.closest("[data-tip]");if(!t){tip.hidden=true;return}tip.innerHTML=t.getAttribute("data-tip");tip.hidden=false;var x=e.clientX+14,y=e.clientY+14;var r=tip.getBoundingClientRect();if(x+r.width>window.innerWidth-8)x=e.clientX-r.width-14;if(y+r.height>window.innerHeight-8)y=e.clientY-r.height-14;tip.style.left=x+"px";tip.style.top=y+"px"}
+  document.addEventListener("pointermove",show);
+  document.addEventListener("pointerdown",show);
+  document.addEventListener("scroll",function(){tip.hidden=true},{passive:true});
+})();
+</script>
