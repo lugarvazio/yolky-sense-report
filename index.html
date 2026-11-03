@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Первый месяц Yolky Sense</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -210,6 +215,19 @@ footer b{color:var(--ink);font-weight:600}
   .db .row,.db .axis{grid-template-columns:minmax(0,7em) minmax(0,1fr) 5.4em;gap:8px}
   .rh .row{grid-template-columns:5.6em minmax(0,1fr);gap:8px}
 }
+
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px;padding:0}
+.tab{display:inline-flex;align-items:center;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--muted);text-decoration:none;font-size:var(--s-small);font-weight:600}
+.tab:hover{color:var(--ink);border-color:var(--faint)}
+.tab.is-active{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.cmp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:8px 0 4px}
+@media(max-width:720px){.cmp{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.cmp{grid-template-columns:1fr}}
+.cmp .panel{padding:14px 14px 12px}
+.cmp .pairline{display:flex;justify-content:space-between;gap:8px;margin-top:6px;font-size:var(--s-small);color:var(--muted)}
+.cmp .pairline b{color:var(--ink);font-variant-numeric:tabular-nums}
+.bday{display:inline-flex;align-items:center;gap:8px;background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:5px 11px;font-size:var(--s-small);font-weight:600;margin-bottom:12px}
+
 </style>
 
 <div class="wrap">
@@ -217,6 +235,10 @@ footer b{color:var(--ink);font-weight:600}
     <span class="brand">YOLKY SENSE</span>
     <span class="rec"><i></i>Mac Mini · 24/7 · 3 сен — 3 окт 2026</span>
   </div>
+  <nav class="tabs" aria-label="Месячные отчёты">
+  <a class="tab is-active" href="#" aria-current="page">Месяц 1 · сен–окт</a>
+  <a class="tab" href="month2.html" >Месяц 2 · окт–ноя</a>
+</nav>
 
   <header class="hero">
     <div>
@@ -621,3 +643,5 @@ footer b{color:var(--ink);font-weight:600}
   document.addEventListener("scroll",function(){tip.hidden=true},{passive:true});
 })();
 </script>
+
+</html>
